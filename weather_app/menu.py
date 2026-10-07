@@ -88,3 +88,23 @@ def draw_forecast(window, canvas):
 
     # ...
 
+def choix_villes(choix):
+    print(choix, CITIES[choix])
+
+def villes(window, canvas):
+
+    def on_city_change(nom):
+        canvas.itemconfig("ville", text=nom + " ▾")
+        print(nom, CITIES[nom])
+
+    liste = tk.Menu(window, tearoff=0)
+    for nom in CITIES:
+        liste.add_command(label=nom, command=lambda n=nom: on_city_change(n))
+
+    canvas.create_text(WIDTH // 2, 60, text="Bordeaux ▾",
+                       font=("Helvetica", 24, "bold"), fill="white", tags="ville")
+
+    def ouvrir(event):
+        liste.tk_popup(event.x_root, event.y_root)
+
+    canvas.tag_bind("ville", "<Button-1>", ouvrir)

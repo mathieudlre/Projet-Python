@@ -21,6 +21,7 @@ def main():
     canvas.pack()
     load_background(canvas)
     draw_welcome_screen(window, canvas)
+    villes(window, canvas)
     window.mainloop()
     # ...
 
