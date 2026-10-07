@@ -49,52 +49,14 @@ def draw_welcome_screen(window, canvas):
     weather_icon = PhotoImage(file=icon_path)
     weather_icon = weather_icon.subsample(2, 2)
     erase_screen(canvas)
-    temperature, code, t_min, t_max = 19.7, 0, 18.0, 27.4
+    temperature, code, t_min, t_max = get_current_weather(city)
 
-    canvas.create_image(
-        200,
-        200,
-        image=weather_icon,
-        tags="ecran"
-    )
+    canvas.create_image(WIDTH // 2, 150, image=weather_icon, tags="ecran")
 
-
-    canvas.create_text(
-        200, 300,
-        text=f"{temperature} °C",
-        font=("Helvetica", 30, "bold"),
-        fill="white",
-        tags="ecran"
-    )
-
-    canvas.create_text(
-        250, 350,
-        text=f"Max : {t_max} °C",
-        font=("Arial", 11, "bold"),
-        fill="white",
-        tags="ecran"
-    )
-
-    canvas.create_text(
-        150, 350,
-        text=f"Min : {t_min} °C",
-        font=("Arial", 11, "bold"),
-        fill="white",
-        tags="ecran"
-    )
-
-    button = tk.Button(
-        window,
-        text="Prévisions 7 jours",
-        command=lambda: draw_forecast(window, canvas)
-    )
-
-    canvas.create_window(
-        200,
-        430,
-        window=button,
-        tags="ecran"
-    )
+    canvas.create_text(WIDTH // 2, 290, text=f"{temperature:.0f}°C",
+                       font=("Arial", 56, "bold"), fill="white", tags="ecran")
+    canvas.create_text(WIDTH // 2, 370, text=f"Min {t_min:.0f}°C   Max {t_max:.0f}°C",
+                       font=("Arial", 18), fill="white", tags="ecran")
 
     # ...
 
@@ -117,14 +79,15 @@ def choix_villes(choix):
 def villes(window, canvas):
 
     def on_city_change(nom):
-        canvas.itemconfig("ville", text=nom + " ▾")
-        print(nom, CITIES[nom])
+        global city
+        city = nom
+        draw_welcome_screen(window, canvas)
 
     liste = tk.Menu(window, tearoff=0)
     for nom in CITIES:
         liste.add_command(label=nom, command=lambda n=nom: on_city_change(n))
 
-    canvas.create_text(WIDTH // 2, 60, text="Bordeaux ▾",
+    canvas.create_text(WIDTH // 2, 60, text= city +" ▾",
                        font=("Helvetica", 24, "bold"), fill="white", tags="ville")
 
     def ouvrir(event):
