@@ -1,4 +1,5 @@
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 # ----------------------------------------------------------------------
 # Plot Matplotlib
@@ -13,6 +14,10 @@ def create_plot(dates, temperatures_min, temperatures_max):
 
     # TODO
     # axes.plot(...)
+    #courbe max
+    axes.plot(temperatures_max, color="red", marker="o")
+    #courbe min
+    axes.plot(temperatures_min,color='blue', marker="o")
 
 
 
@@ -24,3 +29,4 @@ def create_plot(dates, temperatures_min, temperatures_max):
     figure.tight_layout()
 
     return figure
+
