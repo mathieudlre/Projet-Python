@@ -46,10 +46,36 @@ def draw_welcome_screen(window, canvas):
     global weather_icon
 
     erase_screen(canvas)
-    temperature, code, t_min, t_max = 0, 0, 0, 0 # TODO
+    temperature, code, t_min, t_max = 19.7, 0, 18.0, 27.4
 
     # TODO
     # canvas.create_text(...)
+    canvas.create_text(200, 50, text="city",
+                       font=("Arial", 30), fill = "white", tags = "ecran")
+
+    canvas.create_text(
+        200, 300,
+        text=f"{temperature} °C",
+        font=("Arial", 30),
+        fill="white",
+        tags="ecran"
+    )
+
+    canvas.create_text(
+        250, 350,
+        text=f"Max : {t_max} °C",
+        font=("Arial", 11),
+        fill="white",
+        tags="ecran"
+    )
+
+    canvas.create_text(
+        150, 350,
+        text=f"Min : {t_min} °C",
+        font=("Arial", 11),
+        fill="white",
+        tags="ecran"
+    )
 
     # ...
 
