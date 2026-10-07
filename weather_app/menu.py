@@ -39,7 +39,7 @@ def erase_screen(canvas):
 
 
 # ----------------------------------------------------------------------
-# Ecrans
+# Écrans
 # ----------------------------------------------------------------------
 
 def draw_welcome_screen(window, canvas):
@@ -48,16 +48,16 @@ def draw_welcome_screen(window, canvas):
     icon_path = "assets/icons/sunny.png"
     weather_icon = PhotoImage(file=icon_path)
     weather_icon = weather_icon.subsample(2, 2)
+    
     erase_screen(canvas)
+    
     temperature, code, t_min, t_max = 19.7, 0, 18.0, 27.4
 
     canvas.create_image(
-        200,
-        200,
+        200, 200,
         image=weather_icon,
         tags="ecran"
     )
-
 
     canvas.create_text(
         200, 300,
@@ -90,13 +90,11 @@ def draw_welcome_screen(window, canvas):
     )
 
     canvas.create_window(
-        200,
-        430,
+        200, 430,
         window=button,
         tags="ecran"
     )
 
-    # ...
 
 def draw_forecast(window, canvas):
     """Écran 2 : graphique des températures sur 7 jours"""
@@ -109,18 +107,25 @@ def draw_forecast(window, canvas):
         [27.0, 27.2, 21.5, 17.6, 19.0, 21.0, 20.0]
     )
 
-    # Titre et période
+    # Titre et période (avec le tag "ecran")
+    canvas.create_text(
+        WIDTH // 2, 35,
+        text="Prévisions sur 7 jours - Bordeaux",
+        font=("Helvetica", 16, "bold"), fill="white",
+        tags="ecran"
+    )
     canvas.create_text(
         WIDTH // 2, 60,
         text=f"Du {dates[0]} au {dates[-1]}",
-        font=("Helvetica", 10), fill="white"
+        font=("Helvetica", 10), fill="white",
+        tags="ecran"
     )
 
     # Graphique Matplotlib
     fig = create_plot(dates, t_mins, t_maxs)
     chart_canvas = FigureCanvasTkAgg(fig, master=window)
     chart_widget = chart_canvas.get_tk_widget()
-    canvas.create_window(WIDTH // 2, 230, window=chart_widget)
+    canvas.create_window(WIDTH // 2, 230, window=chart_widget, tags="ecran")
 
     # Navigation (Boutons bas)
     def aller_accueil():
@@ -135,9 +140,9 @@ def draw_forecast(window, canvas):
     btn_accueil = tk.Button(window, text="Accueil", command=aller_accueil)
     btn_next = tk.Button(window, text="►", width=4)
 
-    canvas.create_window(WIDTH // 2 - 80, 420, window=btn_prev)
-    canvas.create_window(WIDTH // 2, 420, window=btn_accueil)
-    canvas.create_window(WIDTH // 2 + 80, 420, window=btn_next)
+    canvas.create_window(WIDTH // 2 - 80, 420, window=btn_prev, tags="ecran")
+    canvas.create_window(WIDTH // 2, 420, window=btn_accueil, tags="ecran")
+    canvas.create_window(WIDTH // 2 + 80, 420, window=btn_next, tags="ecran")
 
 
 def villes(window, canvas):
@@ -150,12 +155,13 @@ def villes(window, canvas):
     for nom in CITIES:
         liste.add_command(label=nom, command=lambda n=nom: on_city_change(n))
 
+    # Ajout des deux tags ("ecran" et "ville") pour qu'il soit effacé au changement d'écran
     canvas.create_text(
         WIDTH // 2, 60, 
         text="Bordeaux ▾",
         font=("Helvetica", 24, "bold"), 
         fill="white", 
-        tags="ville"
+        tags=("ecran", "ville")
     )
 
     def ouvrir(event):
