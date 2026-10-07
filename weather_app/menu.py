@@ -79,13 +79,48 @@ def draw_forecast(window, canvas):
     """Écran 2 : graphique des températures sur 7 jours"""
 
     erase_screen(canvas)
-    # start_day = ...
-    dates, t_mins, t_maxs = [], [], [] # TODO
+    
+    dates, t_mins, t_maxs = (
+        ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11'], 
+        [18.5, 18.2, 18.0, 12.6, 9.0, 11.0, 13.3], 
+        [27.0, 27.2, 21.5, 17.6, 19.0, 21.0, 20.0]
+    )
 
-    # ...
+    # Titre et période
+    canvas.create_text(
+        WIDTH // 2, 35,
+        text="Prévisions sur 7 jours - Bordeaux",
+        font=("Helvetica", 16, "bold"), fill="white"
+    )
+    canvas.create_text(
+        WIDTH // 2, 60,
+        text=f"Du {dates[0]} au {dates[-1]}",
+        font=("Helvetica", 10), fill="white"
+    )
 
-def choix_villes(choix):
-    print(choix, CITIES[choix])
+    # Graphique Matplotlib
+    fig = create_plot(dates, t_mins, t_maxs)
+    chart_canvas = FigureCanvasTkAgg(fig, master=window)
+    chart_widget = chart_canvas.get_tk_widget()
+    canvas.create_window(WIDTH // 2, 230, window=chart_widget)
+
+    # Navigation (Boutons bas)
+    def aller_accueil():
+        chart_widget.destroy()
+        btn_accueil.destroy()
+        btn_prev.destroy()
+        btn_next.destroy()
+        draw_welcome_screen(window, canvas)
+        villes(window, canvas)
+
+    btn_prev = tk.Button(window, text="◄", width=4)
+    btn_accueil = tk.Button(window, text="Accueil", command=aller_accueil)
+    btn_next = tk.Button(window, text="►", width=4)
+
+    canvas.create_window(WIDTH // 2 - 80, 420, window=btn_prev)
+    canvas.create_window(WIDTH // 2, 420, window=btn_accueil)
+    canvas.create_window(WIDTH // 2 + 80, 420, window=btn_next)
+
 
 def villes(window, canvas):
 
@@ -97,8 +132,13 @@ def villes(window, canvas):
     for nom in CITIES:
         liste.add_command(label=nom, command=lambda n=nom: on_city_change(n))
 
-    canvas.create_text(WIDTH // 2, 60, text="Bordeaux ▾",
-                       font=("Helvetica", 24, "bold"), fill="white", tags="ville")
+    canvas.create_text(
+        WIDTH // 2, 60, 
+        text="Bordeaux ▾",
+        font=("Helvetica", 24, "bold"), 
+        fill="white", 
+        tags="ville"
+    )
 
     def ouvrir(event):
         liste.tk_popup(event.x_root, event.y_root)
