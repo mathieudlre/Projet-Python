@@ -110,7 +110,7 @@ def draw_forecast(window, canvas):
     # Titre et période (avec le tag "ecran")
     canvas.create_text(
         WIDTH // 2, 35,
-        text="Prévisions sur 7 jours - Bordeaux",
+        text="Prévisions sur 7 jours ",
         font=("Helvetica", 16, "bold"), fill="white",
         tags="ecran"
     )
