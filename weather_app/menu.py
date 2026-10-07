@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import PhotoImage
 from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import date
@@ -44,15 +45,24 @@ def erase_screen(canvas):
 def draw_welcome_screen(window, canvas):
     """Écran 1 : Icône de la météo, température actuelle, températures min et max du jour."""
     global weather_icon
-
+    icon_path = "assets/icons/sunny.png"
+    weather_icon = PhotoImage(file=icon_path)
+    weather_icon = weather_icon.subsample(2, 2)
     erase_screen(canvas)
     temperature, code, t_min, t_max = 19.7, 0, 18.0, 27.4
+
+    canvas.create_image(
+        200,
+        200,
+        image=weather_icon,
+        tags="ecran"
+    )
 
 
     canvas.create_text(
         200, 300,
         text=f"{temperature} °C",
-        font=("Arial", 30),
+        font=("Helvetica", 30, "bold"),
         fill="white",
         tags="ecran"
     )
@@ -60,7 +70,7 @@ def draw_welcome_screen(window, canvas):
     canvas.create_text(
         250, 350,
         text=f"Max : {t_max} °C",
-        font=("Arial", 11),
+        font=("Arial", 11, "bold"),
         fill="white",
         tags="ecran"
     )
@@ -68,8 +78,21 @@ def draw_welcome_screen(window, canvas):
     canvas.create_text(
         150, 350,
         text=f"Min : {t_min} °C",
-        font=("Arial", 11),
+        font=("Arial", 11, "bold"),
         fill="white",
+        tags="ecran"
+    )
+
+    button = tk.Button(
+        window,
+        text="Prévisions 7 jours",
+        command=lambda: draw_forecast(window, canvas)
+    )
+
+    canvas.create_window(
+        200,
+        430,
+        window=button,
         tags="ecran"
     )
 
@@ -87,11 +110,6 @@ def draw_forecast(window, canvas):
     )
 
     # Titre et période
-    canvas.create_text(
-        WIDTH // 2, 35,
-        text="Prévisions sur 7 jours - Bordeaux",
-        font=("Helvetica", 16, "bold"), fill="white"
-    )
     canvas.create_text(
         WIDTH // 2, 60,
         text=f"Du {dates[0]} au {dates[-1]}",
