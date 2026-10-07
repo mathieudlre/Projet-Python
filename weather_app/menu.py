@@ -29,7 +29,7 @@ def load_background(canvas):
     image = Image.open("assets/blue_sky.jpg").convert("RGBA")
     image = image.resize((WIDTH, HEIGHT))
     image_background = ImageTk.PhotoImage(image)
-    # canvas.create_image(...)
+    canvas.create_image(0, 0, image=image_background, anchor="nw")
 
 
 def erase_screen(canvas):
