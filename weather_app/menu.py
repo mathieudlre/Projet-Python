@@ -48,10 +48,6 @@ def draw_welcome_screen(window, canvas):
     erase_screen(canvas)
     temperature, code, t_min, t_max = 19.7, 0, 18.0, 27.4
 
-    # TODO
-    # canvas.create_text(...)
-    canvas.create_text(200, 50, text="city",
-                       font=("Arial", 30), fill = "white", tags = "ecran")
 
     canvas.create_text(
         200, 300,
