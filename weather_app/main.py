@@ -17,9 +17,13 @@ canvas = None
 def main():
     global window, canvas
     window = tk.Tk()
-    # TODO
-
+    canvas = tk.Canvas(window, width = WIDTH, height = HEIGHT)
+    canvas.pack()
+    load_background(canvas)
+    draw_welcome_screen(window, canvas)
+    window.mainloop()
     # ...
+
 
 
 if __name__ == "__main__":
