@@ -50,7 +50,7 @@ def draw_welcome_screen(window, canvas):
     weather_icon = weather_icon.subsample(2, 2)
     erase_screen(canvas)
     temperature, code, t_min, t_max = 19.7, 0, 18.0, 27.4
-
+s
     canvas.create_image(
         200,
         200,
