@@ -80,12 +80,8 @@ def draw_forecast(window, canvas):
     """Écran 2 : graphique des températures sur 7 jours"""
 
     erase_screen(canvas)
-    
-    dates, t_mins, t_maxs = (
-        ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11'], 
-        [18.5, 18.2, 18.0, 12.6, 9.0, 11.0, 13.3], 
-        [27.0, 27.2, 21.5, 17.6, 19.0, 21.0, 20.0]
-    )
+    start_day = date.today()
+    dates, t_mins, t_maxs = get_forecast(city, start_day)
 
     # Titre et période (avec le tag "ecran")
     canvas.create_text(
