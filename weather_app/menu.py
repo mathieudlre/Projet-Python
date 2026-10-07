@@ -83,6 +83,19 @@ def draw_welcome_screen(window, canvas):
         tags="ecran"
     )
 
+    button = tk.Button(
+        window,
+        text="Prévisions 7 jours",
+        command=lambda: draw_forecast(window, canvas)
+    )
+
+    canvas.create_window(
+        200,
+        430,
+        window=button,
+        tags="ecran"
+    )
+
     # ...
 
 def draw_forecast(window, canvas):
