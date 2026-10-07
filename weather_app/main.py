@@ -16,7 +16,7 @@ canvas = None
 
 def main():
     global window, canvas
-
+    window = tk.Tk()
     # TODO
 
     # ...
