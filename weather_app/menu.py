@@ -27,7 +27,11 @@ weather_icon = None
 def load_background(canvas):
     """Charge "assets/blue_sky.jpg", la redimensionne et la place sur le canvas."""
     global image_background
-    image = Image.open("assets/blue_sky.jpg").convert("RGBA")
+    if time_of_day() == "night":
+        path = "assets/night_sky.jpg"
+    else:
+        path = "assets/blue_sky.jpg"
+    image = Image.open(path).convert("RGBA")
     image = image.resize((WIDTH, HEIGHT))
     image_background = ImageTk.PhotoImage(image)
     canvas.create_image(0, 0, image=image_background, anchor="nw")

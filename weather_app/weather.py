@@ -24,5 +24,7 @@ def icon_of_code(code):
 
 def time_of_day():
     """Renvoie "day" ou "night" en fonction de l'heure de la journée"""
-    # TODO
-    pass
+    hour = datetime.now().hour   # heure actuelle, de 0 à 23
+    #if 7 <= hour < 20:
+    #    return "day"
+    return "night"
