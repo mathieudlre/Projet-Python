@@ -2,8 +2,8 @@ import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from datetime import date
-
+from datetime import date, timedelta
+current_start_day = date.today()
 from constants import *
 from weather import *
 from weather_queries import *
@@ -82,10 +82,12 @@ def draw_welcome_screen(window, canvas):
 
 def draw_forecast(window, canvas):
     """Écran 2 : graphique des températures sur 7 jours"""
+    global current_start_day  # <-- Utiliser la variable globale ici
 
     erase_screen(canvas)
-    start_day = date.today()
-    dates, t_mins, t_maxs = get_forecast(city, start_day)
+    
+    # Utilisez current_start_day au lieu de date.today()
+    dates, t_mins, t_maxs = get_forecast(city, current_start_day)
 
     # Titre et période (avec le tag "ecran")
     canvas.create_text(
@@ -107,6 +109,31 @@ def draw_forecast(window, canvas):
     chart_widget = chart_canvas.get_tk_widget()
     canvas.create_window(WIDTH // 2, 230, window=chart_widget, tags="ecran")
 
+    def changer_semaine(delta):
+        global current_start_day
+        min_date = date.today()
+        max_date = date.today() + timedelta(days=9)
+        
+        # Calcul de la nouvelle date
+        nouvelle_date = current_start_day + timedelta(days=delta)
+        
+        # Ajustement intelligent pour ne jamais dépasser les bornes de l'API
+        if delta > 0:
+            if nouvelle_date > max_date:
+                nouvelle_date = max_date
+        else:
+            if nouvelle_date < min_date:
+                nouvelle_date = min_date
+                
+        # Si la date change vraiment, on redessine l'écran
+        if nouvelle_date != current_start_day:
+            current_start_day = nouvelle_date
+            chart_widget.destroy()
+            btn_accueil.destroy()
+            btn_prev.destroy()
+            btn_next.destroy()
+            draw_forecast(window, canvas)  
+   
     # Navigation (Boutons bas)
     def aller_accueil():
         chart_widget.destroy()
@@ -116,15 +143,14 @@ def draw_forecast(window, canvas):
         draw_welcome_screen(window, canvas)
         villes(window, canvas)
 
-    btn_prev = tk.Button(window, text="◄", width=4)
+    btn_prev = tk.Button(window, text="◄", width=4, command=lambda: changer_semaine(-7))
     btn_accueil = tk.Button(window, text="Accueil", command=aller_accueil)
-    btn_next = tk.Button(window, text="►", width=4)
+    btn_next = tk.Button(window, text="►", width=4, command=lambda: changer_semaine(7))
 
     canvas.create_window(WIDTH // 2 - 80, 420, window=btn_prev, tags="ecran")
     canvas.create_window(WIDTH // 2, 420, window=btn_accueil, tags="ecran")
     canvas.create_window(WIDTH // 2 + 80, 420, window=btn_next, tags="ecran")
-
-
+    
 def villes(window, canvas):
 
     def on_city_change(nom):

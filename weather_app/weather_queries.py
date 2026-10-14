@@ -40,8 +40,15 @@ def get_forecast(city, start_day):
         "end_date": end_day.isoformat(),
         "timezone": "auto",
     }
-    response = requests.get(URL_API, params = parameters, timeout = 10)
+    response = requests.get(URL_API, params=parameters, timeout=10)
     data = response.json()
 
-    dates, temperatures_min, temperatures_max = data["daily"]["time"], data["daily"]["temperature_2m_min"], data["daily"]["temperature_2m_max"]
-    return dates, temperatures_min, temperatures_max
+  
+    if "daily" in data:
+        dates = data["daily"]["time"]
+        temperatures_min = data["daily"]["temperature_2m_min"]
+        temperatures_max = data["daily"]["temperature_2m_max"]
+        return dates, temperatures_min, temperatures_max
+    else:
+        print("Erreur API Open-Meteo :", data)
+        return [], [], []
