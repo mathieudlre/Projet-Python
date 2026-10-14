@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -49,18 +50,24 @@ def erase_screen(canvas):
 def draw_welcome_screen(window, canvas):
     """Écran 1 : Icône de la météo, température actuelle, températures min et max du jour."""
     global weather_icon
-    icon_path = "assets/icons/sunny.png"
-    weather_icon = PhotoImage(file=icon_path)
-    weather_icon = weather_icon.subsample(2, 2)
 
     erase_screen(canvas)
     villes(window, canvas)
 
-# Température actuelle, arrondie à l'entier
-
+    # 1. On récupère la météo d'abord
     temperature, code, t_min, t_max = get_current_weather(city)
 
+    # 2. On choisit l'icône à partir du code
+    icon_name = icon_of_code(code)
+    icon_path = f"assets/icons/{icon_name}.png"
+    if not os.path.exists(icon_path):        # sécurité si l'image n'existe pas
+        icon_path = "assets/icons/sunny.png"
+
+    weather_icon = PhotoImage(file=icon_path)
+    weather_icon = weather_icon.subsample(2, 2)
+
     canvas.create_image(WIDTH // 2, 150, image=weather_icon, tags="ecran")
+    # ... la suite ne change pas (textes, bouton)
 
     canvas.create_text(WIDTH // 2, 290, text=f"{temperature:.0f}°C",
                        font=("Arial", 56, "bold"), fill="white", tags="ecran")
@@ -141,7 +148,6 @@ def draw_forecast(window, canvas):
         btn_prev.destroy()
         btn_next.destroy()
         draw_welcome_screen(window, canvas)
-        villes(window, canvas)
 
     btn_prev = tk.Button(window, text="◄", width=4, command=lambda: changer_semaine(-7))
     btn_accueil = tk.Button(window, text="Accueil", command=aller_accueil)
